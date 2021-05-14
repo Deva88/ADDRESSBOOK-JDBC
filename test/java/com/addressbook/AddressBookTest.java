@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import java.sql.SQLException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Arrays;
+
 
 public class AddressBookTest {
     AddressBook addressBook;
@@ -52,9 +56,31 @@ public class AddressBookTest {
     public void givenNewContactData_WhenAdded_ShouldSyncWithDB() throws SQLException {
         addressBook = new AddressBook();
         addressBookDataList = addressBook.readAddressBookData(AddressBook.IOService.DB_IO);
-        addressBook.addContactToAddressBook(3,"ravi","Devendra","Abhi","Hyderabad","TN",5230,"958","devravi@in");
-        boolean result = addressBook.checkAddressBookInSyncWithDB("ravi");
+        addressBook.addContactToAddressBook(3,"Ravi","Devendra","srnagar","Hyderabad","TN",5230,"958","devravi@in");
+        boolean result = addressBook.checkAddressBookInSyncWithDB("Ravi");
         System.out.println("new contact added in Database");
         Assertions.assertTrue(result);
     }
+    @Test
+    public void given6Employees_WhenAdded_Should_ShouldMatchEmpEntries() throws SQLException {
+        AddressBookData[] arrayOfContacts = {
+                new AddressBookData(0, "vishnu", "vardhan", " Nagar","Bangalore", "karnataka", 789654,
+                        7534125, "vishnue@gm.com"),
+                new AddressBookData(0, "Apurva", "Raj", "Keshav Nagar","Pune", "MH", 969654,
+                        972431556, "apue@gmail.com"),
+
+        };
+        AddressBook addressBook = new AddressBook();
+        addressBook.readAddressBookData(AddressBook.IOService.DB_IO);
+        Instant start = Instant.now();
+        addressBook.addContactIntoDB(Arrays.asList(arrayOfContacts));
+        Instant end = Instant.now();
+        System.out.println("Duration without Thread: " + Duration.between(start, end));
+        Instant threadStart = Instant.now();
+        addressBook.addAddressBookDataWithThread(Arrays.asList(arrayOfContacts));
+        Instant threadEnd = Instant.now();
+        System.out.println("Duration with thread: " + Duration.between(threadStart, threadEnd));
+        Assertions.assertEquals(5, addressBook.countEntries(AddressBook.IOService.DB_IO));
+    }
 }
+
