@@ -46,4 +46,5 @@ public class AddressBookData {
         AddressBookData that = (AddressBookData) o;
         return id == that.id && zip == that.zip && phone == that.phone && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(address, that.address) && Objects.equals(city, that.city) && Objects.equals(state, that.state) && Objects.equals(email, that.email);
     }
+
 }
