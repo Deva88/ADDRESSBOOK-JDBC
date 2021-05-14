@@ -4,6 +4,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import java.sql.SQLException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+
 public class AddressBookTest {
     AddressBook addressBook;
     List<AddressBookData> addressBookDataList;
@@ -13,14 +16,24 @@ public class AddressBookTest {
         addressBook = new AddressBook();
         // addressBookDataList = addressBook.readAddressBookData(AddressBook.IOService.DB_IO);
         //Assertions.assertEquals(3, addressBookDataList.size());
-        Assertions.assertEquals(1, addressBook.readAddressBookData(AddressBook.IOService.DB_IO).size());
+        Assertions.assertEquals(2, addressBook.readAddressBookData(AddressBook.IOService.DB_IO).size());
     }
+
     @Test
     public void givenContactDataInDB_whenUpdated_ShouldSyncWithDB() throws SQLException {
         addressBook = new AddressBook();
         addressBookDataList = addressBook.readAddressBookData(AddressBook.IOService.DB_IO);
-        addressBook.updateContact("Garkha", "Devendra");
-        boolean result = addressBook.checkAddressBookInSyncWithDB("Devendra");
+        addressBook.updateContact("BTM", "Abhi");
+        boolean result = addressBook.checkAddressBookInSyncWithDB("Abhi");
         Assertions.assertTrue(result);
+    }
+    @Test
+    public void givenDateRange_WhenContact_ShouldReturnEmpCount() throws SQLException{
+        addressBook = new AddressBook();
+        addressBookDataList = addressBook.readAddressBookData(AddressBook.IOService.DB_IO);
+        LocalDate startDate = LocalDate.of(2018, 02, 01);
+        LocalDate endDate = LocalDate.now();
+        addressBookDataList = addressBook.readPersonDataForDateRange(startDate, endDate);
+        Assertions.assertEquals(2, addressBookDataList.size());
     }
 }

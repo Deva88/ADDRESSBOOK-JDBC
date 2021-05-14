@@ -1,5 +1,6 @@
 package com.addressbook;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class AddressBook {
@@ -25,6 +26,7 @@ public class AddressBook {
             return this.addressBookList = addressBookDBService.getAddressBookDataUsingDB();
         return null;
     }
+
     public void updateContact(String address, String name) {
         int result = addressBookDBService.updateContactDetails(name, address);
     }
@@ -35,6 +37,10 @@ public class AddressBook {
     }
 
     private AddressBookData getEmployeePayrollData(String name) {
-        return this.addressBookList.stream().filter(employeePayrollDataItem -> employeePayrollDataItem.firstName.equals(name)).findFirst().orElse(null);
+        return this.addressBookList.stream().filter(PersonDataItem -> PersonDataItem.firstName.equals(name)).findFirst().orElse(null);
+    }
+
+    public List<AddressBookData> readPersonDataForDateRange(LocalDate startDate, LocalDate endDate) {
+        return addressBookDBService.getPersonDataForDateRange(startDate, endDate);
     }
 }
