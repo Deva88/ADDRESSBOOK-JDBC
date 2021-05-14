@@ -5,6 +5,13 @@ import java.util.List;
 
 public class AddressBook {
 
+    public List<AddressBookData> countByCity(String city) {
+        return addressBookDBService.getCount(city);
+    }
+    public List<AddressBookData> countByState(String state) {
+        return addressBookDBService.getCountByState(state);
+    }
+
     public enum IOService {
         DB_IO
     }
@@ -26,7 +33,6 @@ public class AddressBook {
             return this.addressBookList = addressBookDBService.getAddressBookDataUsingDB();
         return null;
     }
-
     public void updateContact(String address, String name) {
         int result = addressBookDBService.updateContactDetails(name, address);
     }
@@ -39,7 +45,6 @@ public class AddressBook {
     private AddressBookData getEmployeePayrollData(String name) {
         return this.addressBookList.stream().filter(PersonDataItem -> PersonDataItem.firstName.equals(name)).findFirst().orElse(null);
     }
-
     public List<AddressBookData> readPersonDataForDateRange(LocalDate startDate, LocalDate endDate) {
         return addressBookDBService.getPersonDataForDateRange(startDate, endDate);
     }
